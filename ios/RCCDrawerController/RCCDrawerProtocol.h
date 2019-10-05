@@ -21,4 +21,3 @@
 - (void)performAction:(NSString*)performAction actionParams:(NSDictionary*)actionParams bridge:(RCTBridge *)bridge;
 
 @end
-

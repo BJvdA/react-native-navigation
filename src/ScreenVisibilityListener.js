@@ -1,8 +1,4 @@
-import {
-  NativeAppEventEmitter,
-  DeviceEventEmitter,
-  Platform
-} from 'react-native';
+import { NativeAppEventEmitter, DeviceEventEmitter, Platform } from 'react-native';
 export default class ScreenVisibilityListener {
   constructor(listeners) {
     this.emitter = Platform.OS === 'android' ? DeviceEventEmitter : NativeAppEventEmitter;
@@ -10,11 +6,12 @@ export default class ScreenVisibilityListener {
   }
 
   register() {
-    const {willAppear, didAppear, willDisappear, didDisappear} = this.listeners;
+    const { willAppear, didAppear, willDisappear, didDisappear, drawerState } = this.listeners;
     this.willAppearSubscription = willAppear && this.emitter.addListener('willAppear', willAppear);
     this.didAppearSubscription = didAppear && this.emitter.addListener('didAppear', didAppear);
     this.willDisappearSubscription = willDisappear && this.emitter.addListener('willDisappear', willDisappear);
     this.didDisappearSubscription = didDisappear && this.emitter.addListener('didDisappear', didDisappear);
+    this.drawerStateSubscription = drawerState && this.emitter.addListener('drawerState', drawerState);
   }
 
   unregister() {
@@ -32,6 +29,10 @@ export default class ScreenVisibilityListener {
 
     if (this.didDisappearSubscription) {
       this.didDisappearSubscription.remove();
+    }
+
+    if (this.drawerStateSubscription) {
+      this.drawerStateSubscription.remove();
     }
   }
 }

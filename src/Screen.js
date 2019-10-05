@@ -1,5 +1,5 @@
 /*eslint-disable*/
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   NativeAppEventEmitter,
   DeviceEventEmitter,
@@ -74,7 +74,11 @@ class Navigator {
   }
 
   setButtons(params = {}) {
-    return platformSpecific.navigatorSetButtons(this, this.navigatorEventID, params);
+    return platformSpecific.navigatorSetButtons(
+      this,
+      this.navigatorEventID,
+      params
+    );
   }
 
   setTitle(params = {}) {
@@ -143,7 +147,9 @@ class Navigator {
 
   setOnNavigatorEvent(callback) {
     if (this.navigatorEventHandlers.length > 0) {
-      throw new Error('setOnNavigatorEvent can not be used after addOnNavigatorEvent has been called');
+      throw new Error(
+        'setOnNavigatorEvent can not be used after addOnNavigatorEvent has been called'
+      );
     }
     this.navigatorEventHandler = callback;
     this._registerNavigatorEvent();
@@ -151,22 +157,29 @@ class Navigator {
 
   addOnNavigatorEvent(callback) {
     if (this.navigatorEventHandler) {
-      throw new Error('addOnNavigatorEvent can not be used after setOnNavigatorEvent has been called');
+      throw new Error(
+        'addOnNavigatorEvent can not be used after setOnNavigatorEvent has been called'
+      );
     }
     if (this.navigatorEventHandlers.indexOf(callback) === -1) {
       this.navigatorEventHandlers.push(callback);
     }
     this._registerNavigatorEvent();
 
-    return () => this._removeOnNavigatorEvent(callback)
-    
+    return () => this._removeOnNavigatorEvent(callback);
   }
 
   _registerNavigatorEvent() {
     if (!this.navigatorEventSubscription) {
-      let Emitter = Platform.OS === 'android' ? DeviceEventEmitter : NativeAppEventEmitter;
-      this.navigatorEventSubscription = Emitter.addListener(this.navigatorEventID, (event) => this.onNavigatorEvent(event));
-      Navigation.setEventHandler(this.navigatorEventID, (event) => this.onNavigatorEvent(event));
+      let Emitter =
+        Platform.OS === 'android' ? DeviceEventEmitter : NativeAppEventEmitter;
+      this.navigatorEventSubscription = Emitter.addListener(
+        this.navigatorEventID,
+        event => this.onNavigatorEvent(event)
+      );
+      Navigation.setEventHandler(this.navigatorEventID, event =>
+        this.onNavigatorEvent(event)
+      );
     }
   }
 
@@ -212,7 +225,11 @@ class Screen extends Component {
   constructor(props) {
     super(props);
     if (props.navigatorID) {
-      this.navigator = new Navigator(props.navigatorID, props.navigatorEventID, props.screenInstanceID);
+      this.navigator = new Navigator(
+        props.navigatorID,
+        props.navigatorEventID,
+        props.screenInstanceID
+      );
     }
   }
 
@@ -224,7 +241,4 @@ class Screen extends Component {
   }
 }
 
-export {
-  Screen,
-  Navigator
-};
+export { Screen, Navigator };
